@@ -5,7 +5,12 @@ import TextInput from "@/Components/TextInput";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Link, router } from "@inertiajs/react";
 
-export default function TasksTable({ tasks, queryParams }) {
+export default function TasksTable({
+  tasks,
+  queryParams = null,
+  hideProjectColumn = false,
+}) {
+  queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
       queryParams[name] = value;
@@ -50,6 +55,9 @@ export default function TasksTable({ tasks, queryParams }) {
                 ID
               </TableHeading>
               <th className="px-3 py-3">Image</th>
+              {!hideProjectColumn && (
+                <th className="px-3 py-3">Project Name</th>
+              )}
               <TableHeading
                 name="name"
                 sort_field={queryParams.sort_field}
@@ -90,6 +98,7 @@ export default function TasksTable({ tasks, queryParams }) {
             <tr className="text-nowrap">
               <th className="px-3 py-3"></th>
               <th className="px-3 py-3"></th>
+              <th className="px-3 py-3"></th>
               <th className="px-3 py-3">
                 <TextInput
                   className="w-full"
@@ -113,7 +122,7 @@ export default function TasksTable({ tasks, queryParams }) {
               </th>
               <th className="px-3 py-3"></th>
               <th className="px-3 py-3"></th>
-              <th className="px-3 py-3"></th>
+              {!hideProjectColumn && <th className="px-3 py-3"></th>}
               <th className="px-3 py-3"></th>
             </tr>
           </thead>
@@ -127,9 +136,10 @@ export default function TasksTable({ tasks, queryParams }) {
                 <td className="px-3 py-2">
                   <img style={{ width: 60 }} src={task.image_path} alt="" />
                 </td>
-                <th className="px-3 py-2 text-white text-nowrap hover:underline">
-                  <Link href={route("task.show", task.id)}>{task.name}</Link>
-                </th>
+                {!hideProjectColumn && (
+                  <td className="px-3 py-2 text-nowrap">{task.project.name}</td>
+                )}
+                <td className="px-3 py-2">{task.name}</td>
                 <td className="px-3 py-2">
                   <span
                     className={
