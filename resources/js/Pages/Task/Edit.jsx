@@ -24,6 +24,8 @@ export default function Edit({ auth, task, projects, users }) {
 
     post(route("task.update", task.id));
   };
+
+  console.log("***Edit***", task);
   return (
     <AuthenticatedLayout
       user={auth.user}
